@@ -3,12 +3,12 @@ import Logo from '../assets/logo.png';
 function NavBar() {
   return (
     <header className="bg-white">
-      <div className='shadow-md py-4 px-6 mb-1'>
+      <div className='shadow-md py-4 px-6'>
         <div className="container mx-auto flex justify-between items-center max-w-screen-lg">
           <div className="flex items-center space-x-3">
             <img src={Logo} alt="Logo" className="h-10 w-10" />
             <div>
-              <span className="text-2xl font-bold text-gray-800">BookChoix</span>
+              <span className="text-2xl font-bold text-gray-800">Book Finder</span>
             </div>
           </div>
           <button className="bg-black p-2 rounded-md">
