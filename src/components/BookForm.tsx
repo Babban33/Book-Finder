@@ -1,4 +1,10 @@
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
+interface Book {
+    title: string;
+    author_name?: string[];
+    publisher?: string[];
+    isbn?: string[];
+}
 
 function BookForm() {
     const [formData, setFormData] = useState({
@@ -8,8 +14,9 @@ function BookForm() {
         publisher: ''
     });
     const [error, setError] = useState('');
+    const [searchResults, setSearchResults] = useState<Book[] | null>(null);
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         setFormData({ ...formData, [id]: value });
         if (error) {
@@ -17,13 +24,37 @@ function BookForm() {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!formData.bookTitle && !formData.author && !formData.isbn && !formData.publisher) {
             setError('At least one field is required.');
         } else {
             setError('');
-            console.log("Form submitted with data:", formData);
+
+            // Convert all input values to lowercase
+            const lowerCaseFormData = {
+                bookTitle: formData.bookTitle.toLowerCase(),
+                author: formData.author.toLowerCase(),
+                isbn: formData.isbn.toLowerCase(),
+                publisher: formData.publisher.toLowerCase()
+            };
+
+            // Construct the query string based on filled fields
+            const queryParams = [];
+            if (lowerCaseFormData.bookTitle) queryParams.push(`title=${encodeURIComponent(lowerCaseFormData.bookTitle)}`);
+            if (lowerCaseFormData.author) queryParams.push(`author=${encodeURIComponent(lowerCaseFormData.author)}`);
+            if (lowerCaseFormData.isbn) queryParams.push(`isbn=${encodeURIComponent(lowerCaseFormData.isbn)}`);
+            if (lowerCaseFormData.publisher) queryParams.push(`publisher=${encodeURIComponent(lowerCaseFormData.publisher)}`);
+
+            const queryString = queryParams.join('&');
+
+            // Fetch data from Open Library Search API
+            const response = await fetch(`https://openlibrary.org/search.json?${queryString}`);
+            const data = await response.json();
+            console.log(data);
+            // Set search results
+            setSearchResults(data.docs);
+            console.log("Search results:", data.docs);
         }
     };
 
@@ -103,6 +134,23 @@ function BookForm() {
                     </button>
                 </div>
             </form>
+
+            {/* Display Search Results */}
+            {searchResults && (
+                <div className="mt-8">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4">Search Results:</h3>
+                    <ul className="space-y-2">
+                        {searchResults.map((book: Book, index: number) => (
+                            <li key={index} className="p-4 border border-gray-300 rounded-md">
+                                <h4 className="font-bold">{book.title}</h4>
+                                <p>Author: {book.author_name?.join(', ')}</p>
+                                <p>Publisher: {book.publisher?.join(', ')}</p>
+                                <p>ISBN: {book.isbn?.join(', ')}</p>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 }
