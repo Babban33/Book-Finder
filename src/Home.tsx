@@ -1,11 +1,19 @@
+import { useState } from 'react';
 import Landing from './assets/home.png';
 import BookForm from './components/BookForm';
 import Results from './Results';
+import Book from './components/Types';
+
 function Home() {
+  const [searchResults, setSearchResults] = useState<Book[] | null>(null);
+
+  const handleSearchResults = (results: Book[] | null) => {
+    setSearchResults(results);
+  };
+
   return (
     <div className="bg-[#F8F9FA] p-8">
       <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center lg:items-start text-left">
-        
         <div className="lg:w-1/3">
           <div className="text-sm inline-block lg:text-md uppercase font-medium tracking-wide bg-[#f0eff1] text-[#121823] rounded-sm text-left px-4 py-1 lg:px-4 lg:py-1 mb-4 lg:leading-10">
             Embed PDF Feature
@@ -34,9 +42,9 @@ function Home() {
       </div>
 
       <div className="flex justify-center items-center mt-16">
-        <BookForm />
+        <BookForm onSearch={handleSearchResults} />
       </div>
-      <Results/>
+      <Results searchResults={searchResults} />
     </div>
   );
 }
