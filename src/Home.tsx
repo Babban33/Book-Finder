@@ -44,7 +44,7 @@ function Home() {
       <div className="flex justify-center items-center mt-16">
         <BookForm onSearch={handleSearchResults} />
       </div>
-      <Results searchResults={searchResults} />
+      {searchResults && <Results searchResults={searchResults} />}
     </div>
   );
 }

@@ -42,17 +42,26 @@ function BookForm({ onSearch }: BookFormProps) {
       if (lowerCaseFormData.publisher) queryParams.push(`publisher=${lowerCaseFormData.publisher}`);
 
       const queryString = queryParams.join('&');
-      const response = await fetch(`https://openlibrary.org/search.json?${queryString}`);
-      const data = await response.json();
 
-      // Include cover URL in the results
-      const booksWithCovers = data.docs.map((book: any) => {
-        const coverId = book.cover_i;
-        const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : null;
-        return { ...book, coverUrl };
-      });
+      try {
+        const response = await fetch(`https://openlibrary.org/search.json?${queryString}`);
+        if (!response.ok) {
+          throw new Error('Server is unavailable. Please try again later.');
+        }
+        const data = await response.json();
 
-      onSearch(booksWithCovers);
+        // Include cover URL in the results
+        const booksWithCovers = data.docs.map((book: any) => {
+          const coverId = book.cover_i;
+          const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : null;
+          return { ...book, coverUrl };
+        });
+
+        onSearch(booksWithCovers);
+      } catch (error) {
+        console.log(error);
+        setError('Server is unavailable. Please try again later.');
+      }
     }
   };
 
