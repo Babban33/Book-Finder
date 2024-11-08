@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body{
+    box-sizing: border-box;
+    font-size: 16px!important;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font: inherit;
+    vertical-align: baseline;
+    font-style: inherit;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    word-wrap: break-word;
+    margin: 0;
+    background-color: #fff;
+    font-weight: 400;
+    line-height: 25px;
+    color: #606775;
+    font-family: "Jost", Sans-serif;
+}
