@@ -3,6 +3,7 @@ import Loader from './components/loader';
 import { useEffect, useState } from "react";
 import NavBar from './components/NavBar';
 import Home from './Home';
+import Footer from './components/Footer';
 function App() {
   const [loading, setLoading] = useState(true)
   useEffect(() => {
@@ -15,8 +16,9 @@ function App() {
     <>
     <NavBar/>
     <Home/>
+    <Footer/>
     </>
   )
 }
 
-export default App
+export default App;
