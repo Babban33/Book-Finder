@@ -27,20 +27,20 @@ function Results({ searchResults }: ResultsProps) {
                 <img
                   src={book.coverUrl}
                   alt={`Cover of ${book.title}`}
-                  className="mb-4 w-full h-60 object-cover rounded-md"
+                  className="mb-4 w-full h-60 object-contain rounded-md"
                 />
               ) : (
                 <div className="mb-4 w-full h-60 flex items-center justify-center border-2 border-dotted border-gray-300 text-gray-400 rounded-md">
                   No Cover Photo
                 </div>
               )}
-              <h4 className="font-bold text-lg text-gray-800">{book.title}</h4>
-              <p className="text-gray-600">By {book.author_name?.join(', ') || 'Unknown'}</p>
+              <h4 className="font-bold text-lg text-gray-800 truncate">{book.title}</h4>
+              <p className="text-gray-600 truncate">By {book.author_name?.join(', ') || 'Unknown'}</p>
               <button
                 onClick={() => handleMoreDetailsClick(book)}
-                className="mt-4 text-blue-600 underline"
+                className="mt-4 text-gray-600 underline"
               >
-                Click Here for more Details
+                More Details
               </button>
             </li>
           ))}
