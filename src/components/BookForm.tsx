@@ -13,6 +13,7 @@ function BookForm({ onSearch }: BookFormProps) {
     publisher: ''
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -28,6 +29,7 @@ function BookForm({ onSearch }: BookFormProps) {
       setError('At least one field is required.');
     } else {
       setError('');
+      setLoading(true);
       const lowerCaseFormData = {
         bookTitle: formData.bookTitle.toLowerCase().split(' ').join('+'),
         author: formData.author.toLowerCase().split(' ').join('+'),
@@ -50,7 +52,6 @@ function BookForm({ onSearch }: BookFormProps) {
         }
         const data = await response.json();
 
-        // Include cover URL in the results
         const booksWithCovers = data.docs.map((book: any) => {
           const coverId = book.cover_i;
           const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : null;
@@ -61,6 +62,8 @@ function BookForm({ onSearch }: BookFormProps) {
       } catch (error) {
         console.log(error);
         setError('Server is unavailable. Please try again later.');
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -74,6 +77,7 @@ function BookForm({ onSearch }: BookFormProps) {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-red-500 text-center font-medium">{error}</p>}
+        {loading && <p className="text-blue-500 text-center font-medium">Please wait...</p>} {/* Loading message */}
 
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1">
