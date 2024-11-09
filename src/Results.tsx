@@ -7,13 +7,23 @@ interface ResultsProps {
 
 function Results({ searchResults }: ResultsProps) {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [showFullList, setShowFullList] = useState<{ authors: boolean; publishers: boolean; isbns: boolean }>({
+    authors: false,
+    publishers: false,
+    isbns: false,
+  });
 
   const handleMoreDetailsClick = (book: Book) => {
     setSelectedBook(book);
+    setShowFullList({ authors: false, publishers: false, isbns: false }); // Reset show full list
   };
 
   const handleCloseModal = () => {
     setSelectedBook(null);
+  };
+
+  const toggleShowMore = (type: 'authors' | 'publishers' | 'isbns') => {
+    setShowFullList((prev) => ({ ...prev, [type]: !prev[type] }));
   };
 
   return (
@@ -54,20 +64,62 @@ function Results({ searchResults }: ResultsProps) {
           <div className="bg-white w-11/12 max-w-lg p-6 rounded-lg shadow-lg relative max-h-[80vh] flex flex-col">
             <div className="flex-grow overflow-y-auto">
               {selectedBook.coverUrl ? (
-                  <img
-                    src={selectedBook.coverUrl}
-                    alt={`Cover of ${selectedBook.title}`}
-                    className="w-full object-cover rounded-md mb-4"
-                  />
-                ) : (
-                  <div className="w-full h-60 flex items-center justify-center border-2 border-dotted border-gray-300 text-gray-400 rounded-md mb-4">
-                    No Cover Photo
-                  </div>
+                <img
+                  src={selectedBook.coverUrl}
+                  alt={`Cover of ${selectedBook.title}`}
+                  className="w-full object-contain rounded-md mb-4"
+                />
+              ) : (
+                <div className="w-full h-60 flex items-center justify-center border-2 border-dotted border-gray-300 text-gray-400 rounded-md mb-4">
+                  No Cover Photo
+                </div>
+              )}
+              <h4 className="text-2xl font-bold text-gray-800 mb-2">{selectedBook.title}</h4>
+
+              <p className="text-gray-600 mb-2">
+                Author(s):{" "}
+                {selectedBook.author_name && selectedBook.author_name.length > 5 && !showFullList.authors
+                  ? selectedBook.author_name.slice(0, 5).join(', ') + '...'
+                  : selectedBook.author_name?.join(', ') || 'Unknown'}
+                {selectedBook.author_name && selectedBook.author_name.length > 5 && (
+                  <button
+                    onClick={() => toggleShowMore('authors')}
+                    className="text-blue-500 ml-1"
+                  >
+                    {showFullList.authors ? 'Show Less' : 'Show More'}
+                  </button>
                 )}
-                <h4 className="text-2xl font-bold text-gray-800 mb-2">{selectedBook.title}</h4>
-                <p className="text-gray-600 mb-2">Author(s): {selectedBook.author_name?.join(', ') || 'Unknown'}</p>
-                <p className="text-gray-500 mb-2">Publisher(s): {selectedBook.publisher?.join(', ') || 'Unknown'}</p>
-                <p className="text-gray-500">ISBN(s): {selectedBook.isbn?.join(', ') || 'N/A'}</p>
+              </p>
+
+              <p className="text-gray-500 mb-2">
+                Publisher(s):{" "}
+                {selectedBook.publisher && selectedBook.publisher.length > 5 && !showFullList.publishers
+                  ? selectedBook.publisher.slice(0, 5).join(', ') + '...'
+                  : selectedBook.publisher?.join(', ') || 'Unknown'}
+                {selectedBook.publisher && selectedBook.publisher.length > 5 && (
+                  <button
+                    onClick={() => toggleShowMore('publishers')}
+                    className="text-blue-500 ml-1"
+                  >
+                    {showFullList.publishers ? 'Show Less' : 'Show More'}
+                  </button>
+                )}
+              </p>
+
+              <p className="text-gray-500">
+                ISBN(s):{" "}
+                {selectedBook.isbn && selectedBook.isbn.length > 5 && !showFullList.isbns
+                  ? selectedBook.isbn.slice(0, 5).join(', ') + '...'
+                  : selectedBook.isbn?.join(', ') || 'N/A'}
+                {selectedBook.isbn && selectedBook.isbn.length > 5 && (
+                  <button
+                    onClick={() => toggleShowMore('isbns')}
+                    className="text-blue-500 ml-1"
+                  >
+                    {showFullList.isbns ? 'Show Less' : 'Show More'}
+                  </button>
+                )}
+              </p>
             </div>
             <button
               onClick={handleCloseModal}
