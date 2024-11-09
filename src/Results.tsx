@@ -15,7 +15,7 @@ function Results({ searchResults }: ResultsProps) {
 
   const handleMoreDetailsClick = (book: Book) => {
     setSelectedBook(book);
-    setShowFullList({ authors: false, publishers: false, isbns: false }); // Reset show full list
+    setShowFullList({ authors: false, publishers: false, isbns: false });
   };
 
   const handleCloseModal = () => {
@@ -61,19 +61,21 @@ function Results({ searchResults }: ResultsProps) {
       
       {selectedBook && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white w-11/12 max-w-lg p-6 rounded-lg shadow-lg relative max-h-[80vh] flex flex-col">
-            <div className="flex-grow overflow-y-auto">
+          <div className="bg-white w-11/12 lg:w-3/4 p-6 rounded-lg shadow-lg relative max-h-[80vh] flex flex-col lg:flex-row">
+            <div className="lg:flex-shrink-0 lg:w-1/3 flex justify-center items-center">
               {selectedBook.coverUrl ? (
                 <img
                   src={selectedBook.coverUrl}
                   alt={`Cover of ${selectedBook.title}`}
-                  className="w-full object-contain rounded-md mb-4"
+                  className="w-full object-contain rounded-md mb-4 lg:mb-0"
                 />
               ) : (
-                <div className="w-full h-60 flex items-center justify-center border-2 border-dotted border-gray-300 text-gray-400 rounded-md mb-4">
+                <div className="w-full h-60 flex items-center justify-center border-2 border-dotted border-gray-300 text-gray-400 rounded-md mb-4 lg:mb-0">
                   No Cover Photo
                 </div>
               )}
+            </div>
+            <div className="lg:flex-grow lg:w-2/3 lg:pl-6 overflow-y-auto">
               <h4 className="text-2xl font-bold text-gray-800 mb-2">{selectedBook.title}</h4>
 
               <p className="text-gray-600 mb-2">
@@ -123,7 +125,7 @@ function Results({ searchResults }: ResultsProps) {
             </div>
             <button
               onClick={handleCloseModal}
-              className="self-center mt-4 px-6 py-2 text-white bg-[#f18e7d] rounded-sm"
+              className="self-center mt-4 px-6 py-2 text-white bg-[#f18e7d] rounded-sm lg:self-end lg:mt-0 lg:ml-6"
             >
               Close
             </button>
