@@ -52,7 +52,7 @@ function BookForm({ onSearch }: BookFormProps) {
         }
         const data = await response.json();
 
-        const booksWithCovers = data.docs.map((book: any) => {
+        const booksWithCovers = data.docs.map((book: Book) => {
           const coverId = book.cover_i;
           const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : null;
           return { ...book, coverUrl };
